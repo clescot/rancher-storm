@@ -3,7 +3,7 @@
 # VERSION      1.0
 
 # use the ubuntu base image provided by dotCloud
-FROM ubuntu:latest
+FROM ubuntu:15.10
 MAINTAINER Florian HUSSONNOIS, florian.hussonnois_gmail.com
 
 RUN apt-get update
@@ -47,6 +47,16 @@ RUN chown -R storm:storm $STORM_HOME && chmod u+x /home/storm/entrypoint.sh
 
 # Add VOLUMEs to allow backup of config and logs
 VOLUME ["/usr/share/apache-storm/conf","/var/log/storm"]
+
+#add confd
+ADD https://github.com/kelseyhightower/confd/releases/download/v0.11.0/confd-0.11.0-linux-amd64  /usr/local/bin/confd
+RUN chmod +x /usr/local/bin/confd
+
+RUN bash -c 'mkdir -p /etc/confd/{conf.d,templates}'
+
+#copy confd inputs
+COPY ./confd /etc/confd
+
 
 ENTRYPOINT ["/bin/bash", "/home/storm/entrypoint.sh"]
 

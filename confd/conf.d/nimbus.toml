@@ -1,0 +1,8 @@
+[template]
+src = "nimbus.tmpl"
+dest = "/home/storm/nimbus.properties"
+keys = [
+    "/containers",
+    "/services",
+]
+

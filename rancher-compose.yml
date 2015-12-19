@@ -1,0 +1,7 @@
+storm-nimbus:
+  scale: 1
+
+storm-supervisor:
+  scale: 3
+storm-ui:
+  scale: 1

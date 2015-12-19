@@ -38,29 +38,15 @@ case $1 in
     ;;
 esac
 
-# Set nimbus address to localhost by default
-if [ -z "$NIMBUS_ADDR" ]; then
-  export NIMBUS_ADDR=127.0.0.1;
-fi
+export NIMBUS_ADDR=$(cat /home/storm/nimbus.properties);
 
-# Set zookeeper address to localhost by default
-if [ -z "$ZOOKEEPER_ADDR" ]; then
-  export ZOOKEEPER_ADDR=127.0.0.1;
-fi
+export ZOOKEEPER_ADDR=$(cat /home/storm/zookeeper.properties);
 
 # Set storm UI port to 8080 by default
 if [ -z "$UI_PORT" ]; then
   export UI_PORT=8080;
 fi
 
-# storm.yaml - replace zookeeper and nimbus ports with environment variables exposed by Docker container(see docker run --link name:alias)
-if [ ! -z "$NIMBUS_PORT_6627_TCP_ADDR" ]; then
-  export NIMBUS_ADDR=$NIMBUS_PORT_6627_TCP_ADDR;
-fi
-
-if [ ! -z "$ZK_PORT_2181_TCP_ADDR" ]; then
-  export ZOOKEEPER_ADDR=$ZK_PORT_2181_TCP_ADDR;
-fi
 
 function init_storm_yaml() {
     STORM_YAML=$STORM_HOME/conf/storm.yaml
