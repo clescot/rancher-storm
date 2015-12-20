@@ -1,1 +1,2 @@
-{{ $containerName := getv (printf "/services/storm-nimbus/containers/0")}}{{getv (printf "/containers/%s/primary_ip" $containerName)}}:6627\n{{end}}
+{{range ls "/services/storm-nimbus/containers"}}{{ $containerName := getv (printf "/services/storm-nimbus/containers/%s" .)}}{{getv (printf "/containers/%s/primary_ip" $containerName)}}:6627\n{{end}}
+

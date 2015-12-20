@@ -1,13 +1,13 @@
 storm-nimbus:
   command: --daemon nimbus drpc
-  image: clescot/rancher-storm:6
+  image: clescot/rancher-storm:8
   ports:
     - "3773:3773"
     - "3772:3772"
     - "6627:6627"
 storm-supervisor:
   command: --daemon supervisor logviewer
-  image: clescot/rancher-storm:6
+  image: clescot/rancher-storm:8
   ports:
     - "8000:8000"
     - "6700:6700"
@@ -16,6 +16,6 @@ storm-supervisor:
     - "6703:6703"
 storm-ui:
   command: --daemon ui
-  image: clescot/rancher-storm:6
+  image: clescot/rancher-storm:8
   ports:
     - "8080:8080"
