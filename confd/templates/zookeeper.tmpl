@@ -1,1 +1,0 @@
-{{range ls "/services/zookeeper/containers"}}{{ $containerName := getv (printf "/services/zookeeper/containers/%s" .)}}{{getv (printf "/containers/%s/primary_ip" $containerName)}}:2181\n{{end}}

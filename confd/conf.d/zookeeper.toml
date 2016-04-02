@@ -1,8 +1,0 @@
-[template]
-src = "zookeeper.tmpl"
-dest = "/home/storm/zookeeper.properties"
-keys = [
-    "/containers",
-    "/services",
-]
-

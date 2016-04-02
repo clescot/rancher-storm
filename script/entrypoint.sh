@@ -38,9 +38,9 @@ case $1 in
     ;;
 esac
 
-export NIMBUS_ADDR=$(cat /home/storm/nimbus.properties);
+#export NIMBUS_ADDR=$(cat /home/storm/nimbus.properties);
 
-export ZOOKEEPER_ADDR=$(cat /home/storm/zookeeper.properties);
+#export ZOOKEEPER_ADDR=$(cat /home/storm/zookeeper.properties);
 
 # Set storm UI port to 8080 by default
 if [ -z "$UI_PORT" ]; then
@@ -52,8 +52,8 @@ function init_storm_yaml() {
     STORM_YAML=$STORM_HOME/conf/storm.yaml
     cp $STORM_HOME/conf/storm.yaml.template $STORM_YAML
 
-    sed -i s/%zookeeper%/$ZOOKEEPER_ADDR/g $STORM_YAML
-    sed -i s/%nimbus%/$NIMBUS_ADDR/g $STORM_YAML
+ #   sed -i s/%zookeeper%/$ZOOKEEPER_ADDR/g $STORM_YAML
+ #   sed -i s/%nimbus%/$NIMBUS_ADDR/g $STORM_YAML
     sed -i s/%ui_port%/$UI_PORT/g $STORM_YAML
     for var in `( set -o posix ; set ) | grep CONFIG_`; do
         name=${var%"="*}

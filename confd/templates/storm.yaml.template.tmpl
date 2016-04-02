@@ -1,0 +1,22 @@
+storm.zookeeper.servers:
+{{range ls "/services/zookeeper/containers"}}
+    - "{{ $containerName := getv (printf "/services/zookeeper/containers/%s" .)}}{{getv (printf "/containers/%s/primary_ip" $containerName)}}"
+{{end}}
+
+nimbus.host: {{range ls "/services/storm-nimbus/containers"}}{{ $containerName := getv (printf "/services/storm-nimbus/containers/%s" .)}}{{getv (printf "/containers/%s/primary_ip" $containerName)}}{{end}}
+
+
+ui.port: %ui_port%
+
+# netty transport
+storm.messaging.transport: "backtype.storm.messaging.netty.Context"
+storm.messaging.netty.buffer_size: 16384
+storm.messaging.netty.max_retries: 10
+storm.messaging.netty.min_wait_ms: 1000
+storm.messaging.netty.max_wait_ms: 5000
+
+drpc.servers:
+  - "%nimbus%"
+drpc.port: 3772
+drpc.invocations.port: 3773
+

@@ -28,7 +28,7 @@ ENV STORM_VERSION 0.10.0
 # Create storm group and user
 ENV STORM_HOME /usr/share/apache-storm
 
-RUN groupadd storm; useradd --gid storm --home-dir /home/storm --create-home --shell /bin/bash storm
+RUN groupadd storm; useradd --uid 87 --gid storm --home-dir /home/storm --create-home --shell /bin/bash storm
 
 # Download and Install Apache Storm
 RUN wget http://apache.mirrors.ovh.net/ftp.apache.org/dist/storm/apache-storm-$STORM_VERSION/apache-storm-$STORM_VERSION.tar.gz && \
@@ -37,7 +37,7 @@ rm -rf apache-storm-$STORM_VERSION.tar.gz
 
 RUN mkdir /var/log/storm ; chown -R storm:storm /var/log/storm ; ln -s /var/log/storm /home/storm/log
 RUN ln -s $STORM_HOME/bin/storm /usr/bin/storm
-ADD conf/storm.yaml.template $STORM_HOME/conf/storm.yaml.template
+#ADD conf/storm.yaml.template $STORM_HOME/conf/storm.yaml.template
 
 # Add scripts required to run storm daemons under supervision
 ADD script/entrypoint.sh /home/storm/entrypoint.sh
@@ -50,7 +50,8 @@ VOLUME ["/usr/share/apache-storm/conf","/var/log/storm"]
 
 #add confd
 ADD https://github.com/kelseyhightower/confd/releases/download/v0.11.0/confd-0.11.0-linux-amd64  /usr/local/bin/confd
-RUN chmod +x /usr/local/bin/confd
+ADD https://github.com/cloudnautique/giddyup/releases/download/v0.8.0/giddyup /giddyup
+RUN chmod +x /usr/local/bin/confd /giddyup
 
 RUN bash -c 'mkdir -p /etc/confd/{conf.d,templates}'
 

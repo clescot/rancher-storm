@@ -1,0 +1,9 @@
+[template]
+src = "storm.yaml.template.tmpl"
+dest = "/usr/share/apache-storm/conf/storm.yaml.template"
+uid=87
+keys = [
+    "/containers",
+    "/services",
+]
+
