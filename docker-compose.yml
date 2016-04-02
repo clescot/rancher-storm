@@ -1,21 +1,43 @@
 storm-nimbus:
   command: --daemon nimbus drpc
-  image: clescot/rancher-storm:21
+  image: clescot/rancher-storm:24
   ports:
     - "3773:3773"
     - "3772:3772"
     - "6627:6627"
+  depends_on:
+    - zookeeper
+
 storm-supervisor:
   command: --daemon supervisor logviewer
-  image: clescot/rancher-storm:21
+  image: clescot/rancher-storm:24
+  depends_on:
+    - zookeeper
+
   ports:
     - "8000:8000"
     - "6700:6700"
     - "6701:6701"
     - "6702:6702"
     - "6703:6703"
+
 storm-ui:
   command: --daemon ui
-  image: clescot/rancher-storm:21
+  image: clescot/rancher-storm:24
   ports:
     - "8080:8080"
+  depends_on:
+    - zookeeper
+
+zookeeper:
+  labels:
+    io.rancher.sidekicks: zookeeper-conf
+  image: rancher/zookeeper:3.4.6-2
+  volumes:
+  - /opt/rancher
+
+zookeeper-conf:
+  image: rancher/zookeeper-config:v0.2.0
+  volumes_from:
+  - zookeeper
+  net: container:zookeeper

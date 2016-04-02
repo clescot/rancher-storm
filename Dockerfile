@@ -50,8 +50,6 @@ VOLUME ["/usr/share/apache-storm/conf","/var/log/storm"]
 
 #add confd
 ADD https://github.com/kelseyhightower/confd/releases/download/v0.11.0/confd-0.11.0-linux-amd64  /usr/local/bin/confd
-ADD https://github.com/cloudnautique/giddyup/releases/download/v0.8.0/giddyup /giddyup
-RUN chmod +x /usr/local/bin/confd /giddyup
 
 RUN bash -c 'mkdir -p /etc/confd/{conf.d,templates}'
 

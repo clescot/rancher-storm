@@ -50,7 +50,7 @@ fi
 
 function init_storm_yaml() {
     STORM_YAML=$STORM_HOME/conf/storm.yaml
-    cp $STORM_HOME/conf/storm.yaml.template $STORM_YAML
+#    cp $STORM_HOME/conf/storm.yaml.template $STORM_YAML
 
  #   sed -i s/%zookeeper%/$ZOOKEEPER_ADDR/g $STORM_YAML
  #   sed -i s/%nimbus%/$NIMBUS_ADDR/g $STORM_YAML

@@ -1,9 +1,9 @@
 storm.zookeeper.servers:
-{{range ls "/services/zookeeper/containers"}}
-    - "{{ $containerName := getv (printf "/services/zookeeper/containers/%s" .)}}{{getv (printf "/containers/%s/primary_ip" $containerName)}}"
+{{range ls "/self/stack/services/zookeeper/containers"}}
+    - "{{ $containerName := getv (printf "/self/stack/services/zookeeper/containers/%s" .)}}{{getv (printf "/containers/%s/primary_ip" $containerName)}}"
 {{end}}
 
-nimbus.host: {{range ls "/services/storm-nimbus/containers"}}{{ $containerName := getv (printf "/services/storm-nimbus/containers/%s" .)}}{{getv (printf "/containers/%s/primary_ip" $containerName)}}{{end}}
+nimbus.host: {{range ls "/self/stack/services/storm-nimbus/containers"}}{{ $containerName := getv (printf "/self/stack/services/storm-nimbus/containers/%s" .)}}{{getv (printf "/containers/%s/primary_ip" $containerName)}}{{end}}
 
 
 ui.port: %ui_port%
