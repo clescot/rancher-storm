@@ -49,8 +49,11 @@ fi
 
 
 function init_storm_yaml() {
+
+    CONFD_ONETIME="/usr/local/bin/confd -onetime -backend rancher -prefix /2015-12-19"
+    $CONFD_ONETIME
     STORM_YAML=$STORM_HOME/conf/storm.yaml
-#    cp $STORM_HOME/conf/storm.yaml.template $STORM_YAML
+    cp $STORM_HOME/conf/storm.yaml.template $STORM_YAML
 
  #   sed -i s/%zookeeper%/$ZOOKEEPER_ADDR/g $STORM_YAML
  #   sed -i s/%nimbus%/$NIMBUS_ADDR/g $STORM_YAML

@@ -35,6 +35,9 @@ RUN wget http://apache.mirrors.ovh.net/ftp.apache.org/dist/storm/apache-storm-$S
 tar -xzvf apache-storm-$STORM_VERSION.tar.gz -C /usr/share && mv $STORM_HOME-$STORM_VERSION $STORM_HOME && \
 rm -rf apache-storm-$STORM_VERSION.tar.gz
 
+#add confd binary
+COPY confd-0.11.0-linux-amd64  /usr/local/bin/confd
+
 RUN mkdir /var/log/storm ; chown -R storm:storm /var/log/storm ; ln -s /var/log/storm /home/storm/log
 RUN ln -s $STORM_HOME/bin/storm /usr/bin/storm
 #ADD conf/storm.yaml.template $STORM_HOME/conf/storm.yaml.template
@@ -48,14 +51,10 @@ RUN chown -R storm:storm $STORM_HOME && chmod u+x /home/storm/entrypoint.sh
 # Add VOLUMEs to allow backup of config and logs
 VOLUME ["/usr/share/apache-storm/conf","/var/log/storm"]
 
-#add confd
-ADD https://github.com/kelseyhightower/confd/releases/download/v0.11.0/confd-0.11.0-linux-amd64  /usr/local/bin/confd
-
 RUN bash -c 'mkdir -p /etc/confd/{conf.d,templates}'
 
 #copy confd inputs
 COPY ./confd /etc/confd
-
 
 ENTRYPOINT ["/bin/bash", "/home/storm/entrypoint.sh"]
 
