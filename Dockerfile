@@ -1,8 +1,3 @@
-# apache-storm-0.10.0
-#
-# VERSION      1.0
-
-# use the ubuntu base image provided by dotCloud
 FROM ubuntu:15.10
 MAINTAINER Florian HUSSONNOIS, florian.hussonnois_gmail.com
 
@@ -36,12 +31,15 @@ tar -xzvf apache-storm-$STORM_VERSION.tar.gz -C /usr/share && mv $STORM_HOME-$ST
 rm -rf apache-storm-$STORM_VERSION.tar.gz
 
 #add confd binary
-COPY confd-0.11.0-linux-amd64  /usr/local/bin/confd
-RUN chmod 777 /usr/local/bin/confd
+#COPY confd-0.11.0-linux-amd64  /usr/local/bin/confd
+COPY giddyup.0.9.0 /opt/rancher/bin/giddyup
+RUN chmod u+x /opt/rancher/bin/*
+
+#RUN chmod 777 /usr/local/bin/confd
 
 RUN mkdir /var/log/storm ; chown -R storm:storm /var/log/storm ; ln -s /var/log/storm /home/storm/log
 RUN ln -s $STORM_HOME/bin/storm /usr/bin/storm
-#ADD conf/storm.yaml.template $STORM_HOME/conf/storm.yaml.template
+ADD conf/storm.yaml.template $STORM_HOME/conf/storm.yaml.template
 
 # Add scripts required to run storm daemons under supervision
 ADD script/entrypoint.sh /home/storm/entrypoint.sh
@@ -55,7 +53,7 @@ VOLUME ["/usr/share/apache-storm/conf","/var/log/storm"]
 RUN bash -c 'mkdir -p /etc/confd/{conf.d,templates}'
 
 #copy confd inputs
-COPY ./confd /etc/confd
+#COPY ./confd /etc/confd
 
 ENTRYPOINT ["/bin/bash", "/home/storm/entrypoint.sh"]
 
