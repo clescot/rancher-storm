@@ -11,6 +11,7 @@ if [ $# -lt 1 ]; then
  exit 2;
 fi
 
+
 daemons=(nimbus, drpc, supervisor, ui, logviewer)
 
 # Create supervisor configurations for Storm daemons
@@ -20,7 +21,7 @@ create_supervisor_conf () {
 }
 
 # Command
-case $1 in
+case $1 in  
     --daemon)
         shift
         for daemon in $*; do
@@ -40,7 +41,13 @@ esac
 
 export NIMBUS_ADDR=$(/opt/rancher/bin/giddyup ip stringify storm/storm-nimbus);
 
-export ZOOKEEPER_ADDR=$(/opt/rancher/bin/giddyup ip stringify storm/storm-zookeeper);
+TEMP_ZK=$(/opt/rancher/bin/giddyup ip stringify storm/storm-zookeeper);
+IFS=',' read -r -a array <<< "$TEMP_ZK"
+for element in "${array[@]}"
+do
+    ZOOKEEPER_ADDR+="   -$element\n"
+done
+export ZOOKEEPER_ADDR;
 
 # Set storm UI port to 8080 by default
 if [ -z "$UI_PORT" ]; then

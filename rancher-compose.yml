@@ -6,8 +6,8 @@ storm-supervisor:
 storm-ui:
   scale: 1
 
-zookeeper:
+storm-zookeeper:
   scale: 3
 
-zookeeper-conf:
+storm-zookeeper-conf:
   scale: 3
