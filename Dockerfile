@@ -27,11 +27,11 @@ tar -xzvf apache-storm-$STORM_VERSION.tar.gz -C /usr/share && mv $STORM_HOME-$ST
 rm -rf apache-storm-$STORM_VERSION.tar.gz
 
 #add confd binary
-#COPY confd-0.11.0-linux-amd64  /usr/local/bin/confd
+COPY confd-0.11.0-linux-amd64  /usr/local/bin/confd
 COPY giddyup.0.9.0 /opt/rancher/bin/giddyup
 RUN chmod u+x /opt/rancher/bin/*
 
-#RUN chmod 777 /usr/local/bin/confd
+RUN chmod 777 /usr/local/bin/confd
 
 RUN mkdir /var/log/storm ; chown -R storm:storm /var/log/storm ; ln -s /var/log/storm /home/storm/log
 RUN ln -s $STORM_HOME/bin/storm /usr/bin/storm
@@ -49,7 +49,7 @@ VOLUME ["/usr/share/apache-storm/conf","/var/log/storm"]
 RUN bash -c 'mkdir -p /etc/confd/{conf.d,templates}'
 
 #copy confd inputs
-#COPY ./confd /etc/confd
+COPY ./confd /etc/confd
 
 ENTRYPOINT ["/bin/bash", "/home/storm/entrypoint.sh"]
 
