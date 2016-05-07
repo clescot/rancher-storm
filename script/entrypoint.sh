@@ -56,7 +56,7 @@ fi
 
 
 function init_storm_yaml() {
-
+    ZK_SERVICE=${ZK_SERVICE:-"kafka-zk/zk"}
     STORM_YAML=$STORM_HOME/conf/storm.yaml
     cp $STORM_HOME/conf/storm.yaml.template $STORM_YAML
 
