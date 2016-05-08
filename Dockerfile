@@ -28,10 +28,6 @@ rm -rf apache-storm-$STORM_VERSION.tar.gz
 
 #add confd binary
 COPY confd-0.11.0-linux-amd64  /usr/local/bin/confd
-COPY giddyup.0.9.0 /opt/rancher/bin/giddyup
-RUN chmod u+x /opt/rancher/bin/*
-
-RUN chmod 777 /usr/local/bin/confd
 
 RUN mkdir /var/log/storm ; chown -R storm:storm /var/log/storm ; ln -s /var/log/storm /home/storm/log
 RUN ln -s $STORM_HOME/bin/storm /usr/bin/storm
