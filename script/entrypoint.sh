@@ -11,7 +11,6 @@ if [ $# -lt 1 ]; then
  exit 2;
 fi
 
-
 daemons=(nimbus, drpc, supervisor, ui, logviewer)
 
 # Create supervisor configurations for Storm daemons
@@ -21,7 +20,7 @@ create_supervisor_conf () {
 }
 
 # Command
-case $1 in  
+case $1 in
     --daemon)
         shift
         for daemon in $*; do
@@ -39,24 +38,17 @@ case $1 in
     ;;
 esac
 
-export NIMBUS_ADDR=$(/opt/rancher/bin/giddyup ip stringify storm/storm-nimbus);
 
-TEMP_ZK=$(/opt/rancher/bin/giddyup ip stringify storm/storm-zookeeper);
-IFS=',' read -r -a array <<< "$TEMP_ZK"
-for element in "${array[@]}"
-do
-    ZOOKEEPER_ADDR+="   -$element\n"
-done
-export ZOOKEEPER_ADDR;
-
-# Set storm UI port to 8080 by default
-if [ -z "$UI_PORT" ]; then
-  export UI_PORT=8080;
+# storm.yaml - replace zookeeper and nimbus ports with environment variables exposed by Docker container(see docker run --link name:alias)
+if [ ! -z "$NIMBUS_PORT_6627_TCP_ADDR" ]; then
+  export NIMBUS_ADDR=$NIMBUS_PORT_6627_TCP_ADDR;
 fi
 
+if [ ! -z "$ZK_PORT_2181_TCP_ADDR" ]; then
+  export ZOOKEEPER_ADDR=$ZK_PORT_2181_TCP_ADDR;
+fi
 
 function init_storm_yaml() {
-    ZK_SERVICE=${ZK_SERVICE:-"kafka-zk/zk"}
     STORM_YAML=$STORM_HOME/conf/storm.yaml
     cp $STORM_HOME/conf/storm.yaml.template $STORM_YAML
 
@@ -84,3 +76,4 @@ init_storm_yaml
 supervisord
 
 exit 0;
+
