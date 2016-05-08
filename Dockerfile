@@ -26,26 +26,33 @@ RUN wget http://apache.mirrors.ovh.net/ftp.apache.org/dist/storm/apache-storm-$S
 tar -xzvf apache-storm-$STORM_VERSION.tar.gz -C /usr/share && mv $STORM_HOME-$STORM_VERSION $STORM_HOME && \
 rm -rf apache-storm-$STORM_VERSION.tar.gz
 
-#add confd binary
+RUN chown -R storm:storm $STORM_HOME
+
+#add confd 
 COPY confd-0.11.0-linux-amd64  /usr/local/bin/confd
+RUN bash -c 'mkdir -p /etc/confd/{conf.d,templates}'
+
+COPY ./confd /etc/confd
+
 
 RUN mkdir /var/log/storm ; chown -R storm:storm /var/log/storm ; ln -s /var/log/storm /home/storm/log
 RUN ln -s $STORM_HOME/bin/storm /usr/bin/storm
+
+USER storm
+
 ADD conf/storm.yaml.template $STORM_HOME/conf/storm.yaml.template
 
 # Add scripts required to run storm daemons under supervision
-ADD script/entrypoint.sh /home/storm/entrypoint.sh
 ADD supervisor/storm-daemon.conf /home/storm/storm-daemon.conf
+ADD script/entrypoint.sh /home/storm/entrypoint.sh
 
-RUN chown -R storm:storm $STORM_HOME && chmod u+x /home/storm/entrypoint.sh
+USER root 
+RUN chmod u+x /home/storm/entrypoint.sh
+
 
 # Add VOLUMEs to allow backup of config and logs
 VOLUME ["/usr/share/apache-storm/conf","/var/log/storm"]
 
-RUN bash -c 'mkdir -p /etc/confd/{conf.d,templates}'
-
-#copy confd inputs
-COPY ./confd /etc/confd
 
 ENTRYPOINT ["/bin/bash", "/home/storm/entrypoint.sh"]
 

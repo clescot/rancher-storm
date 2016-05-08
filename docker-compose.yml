@@ -1,57 +1,40 @@
 storm-nimbus:
   command: --daemon nimbus drpc
-  image: clescot/rancher-storm:47
+  image: clescot/rancher-storm:51
   labels:
     io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
   ports:
     - "3773:3773"
     - "3772:3772"
     - "6627:6627"
-  depends_on:
-    - storm-zookeeper
-  links:
-    - storm-zookeeper:zookeeper
+  external_links:
+    - zookeeper/zookeeper:zk
 
-
-storm-supervisor:
-  command: --daemon supervisor logviewer
-  image: clescot/rancher-storm:47
-  labels:
-    io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
-  depends_on:
-    - storm-zookeeper
-
-  ports:
-    - "8000:8000"
-    - "6700:6700"
-    - "6701:6701"
-    - "6702:6702"
-    - "6703:6703"
-  links:
-    - storm-zookeeper:zookeeper
-
-storm-ui:
-  command: --daemon ui
-  image: clescot/rancher-storm:47
-  labels:
-    io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
-  ports:
-    - "8080:8080"
-  depends_on:
-    - storm-zookeeper
-  links:
-    - storm-zookeeper:zookeeper
-
-storm-zookeeper:
-  labels:
-    io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
-    io.rancher.sidekicks: storm-zookeeper-conf
-  image: rancher/zookeeper:3.4.6-2
-  volumes:
-  - /opt/rancher
-
-storm-zookeeper-conf:
-  image: rancher/zookeeper-config:v0.2.0
-  volumes_from:
-  - storm-zookeeper
-  net: container:storm-zookeeper
+#storm-supervisor:
+#  command: --daemon supervisor logviewer
+#  image: clescot/rancher-storm:49
+#  labels:
+#    io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+#
+#  ports:
+#    - "8000:8000"
+#    - "6700:6700"
+#    - "6701:6701"
+#    - "6702:6702"
+#    - "6703:6703"
+#  links:
+#    - storm-nimbus:nimbus
+#  external_links:
+#    - zookeeper/zookeeper:zk
+#
+#storm-ui:
+#  command: --daemon ui
+#  image: clescot/rancher-storm:49
+#  labels:
+#    io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+#  ports:
+#    - "8080:8080"
+#  links:
+#    - storm-nimbus:nimbus
+#  external_links:
+#    - zookeeper/zookeeper:zk
