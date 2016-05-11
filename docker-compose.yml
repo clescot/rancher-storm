@@ -1,6 +1,6 @@
 storm-nimbus:
   command: --daemon nimbus drpc
-  image: clescot/rancher-storm:51
+  image: clescot/rancher-storm:53
   labels:
     io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
   ports:
@@ -10,31 +10,31 @@ storm-nimbus:
   external_links:
     - zookeeper/zookeeper:zk
 
-#storm-supervisor:
-#  command: --daemon supervisor logviewer
-#  image: clescot/rancher-storm:49
-#  labels:
-#    io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
-#
-#  ports:
-#    - "8000:8000"
-#    - "6700:6700"
-#    - "6701:6701"
-#    - "6702:6702"
-#    - "6703:6703"
-#  links:
-#    - storm-nimbus:nimbus
-#  external_links:
-#    - zookeeper/zookeeper:zk
-#
-#storm-ui:
-#  command: --daemon ui
-#  image: clescot/rancher-storm:49
-#  labels:
-#    io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
-#  ports:
-#    - "8080:8080"
-#  links:
-#    - storm-nimbus:nimbus
-#  external_links:
-#    - zookeeper/zookeeper:zk
+storm-supervisor:
+  command: --daemon supervisor logviewer
+  image: clescot/rancher-storm:53
+  labels:
+    io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+
+  ports:
+    - "8000:8000"
+    - "6700:6700"
+    - "6701:6701"
+    - "6702:6702"
+    - "6703:6703"
+  links:
+    - storm-nimbus:nimbus
+  external_links:
+    - zookeeper/zookeeper:zk
+
+storm-ui:
+  command: --daemon ui
+  image: clescot/rancher-storm:53
+  labels:
+    io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+  ports:
+    - "8080:8080"
+  links:
+    - storm-nimbus:nimbus
+  external_links:
+    - zookeeper/zookeeper:zk

@@ -33,7 +33,7 @@ COPY confd-0.11.0-linux-amd64  /usr/local/bin/confd
 RUN bash -c 'mkdir -p /etc/confd/{conf.d,templates}'
 
 COPY ./confd /etc/confd
-
+RUN chmod a+x /etc/confd
 
 RUN mkdir /var/log/storm ; chown -R storm:storm /var/log/storm ; ln -s /var/log/storm /home/storm/log
 RUN ln -s $STORM_HOME/bin/storm /usr/bin/storm

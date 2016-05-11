@@ -1,10 +1,6 @@
 storm.zookeeper.servers:
-#-{{range ls "/self/stack/services/storm-zookeeper/containers"}} {{$data := json .Value}}(index $data.ips 1),{{end}}
-############################# Connect Policy #############################{{ $zk_link := split (getenv "ZK_SERVICE") "/" }}{{$zk_stack := index $zk_link 0}}{{ $zk_service := index $zk_link 1}} 
-{{range $i, $e := ls (printf "/stacks/%s/services/%s/containers" $zk_stack $zk_service)}}
--{{if $i}},{{end}}{{getv (printf "/stacks/%s/services/%s/containers/%s/primary_ip" $zk_stack $zk_service $e)}}:2181
+{{range $i, $e := ls ("/stacks/zookeeper/services/zookeeper/containers")}}-{{getv (printf "/stacks/zookeeper/services/zookeeper/containers/%s/primary_ip"  $e)}}:2181
 {{end}}
-
 
 ui.port: %ui_port%
 
@@ -16,7 +12,8 @@ storm.messaging.netty.min_wait_ms: 1000
 storm.messaging.netty.max_wait_ms: 5000
 
 drpc.servers:
-  - "%nimbus%"
+{{range $i, $e := ls ("/stacks/storm/services/storm-nimbus/containers")}}- {{getv (printf "/stacks/storm/services/storm-nimbus/containers/%s/primary_ip"  $e)}}
+{{end}}
 drpc.port: 3772
 drpc.invocations.port: 3773
 
