@@ -31,6 +31,7 @@ RUN chown -R storm:storm $STORM_HOME
 #add confd 
 COPY confd-0.11.0-linux-amd64  /usr/local/bin/confd
 RUN bash -c 'mkdir -p /etc/confd/{conf.d,templates}'
+RUN chmod 777 /usr/local/bin/confd
 
 COPY ./confd /etc/confd
 RUN chmod a+x /etc/confd
@@ -38,13 +39,16 @@ RUN chmod a+x /etc/confd
 RUN mkdir /var/log/storm ; chown -R storm:storm /var/log/storm ; ln -s /var/log/storm /home/storm/log
 RUN ln -s $STORM_HOME/bin/storm /usr/bin/storm
 
+# add ping for checkrancher function in entrypoint
+RUN apt-get install -y iputils-ping
+
 USER storm
 
-ADD conf/storm.yaml.template $STORM_HOME/conf/storm.yaml.template
+#COPY conf/storm.yaml.template $STORM_HOME/conf/storm.yaml.template
 
 # Add scripts required to run storm daemons under supervision
-ADD supervisor/storm-daemon.conf /home/storm/storm-daemon.conf
-ADD script/entrypoint.sh /home/storm/entrypoint.sh
+COPY supervisor/storm-daemon.conf /home/storm/storm-daemon.conf
+COPY script/entrypoint.sh /home/storm/entrypoint.sh
 
 USER root 
 RUN chmod u+x /home/storm/entrypoint.sh

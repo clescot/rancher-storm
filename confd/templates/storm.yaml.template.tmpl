@@ -2,7 +2,7 @@ storm.zookeeper.servers:
 {{range $i, $e := ls ("/stacks/zookeeper/services/zookeeper/containers")}}-{{getv (printf "/stacks/zookeeper/services/zookeeper/containers/%s/primary_ip"  $e)}}:2181
 {{end}}
 
-ui.port: %ui_port%
+ui.port: 8080
 
 # netty transport
 storm.messaging.transport: "backtype.storm.messaging.netty.Context"

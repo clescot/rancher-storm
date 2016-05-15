@@ -50,11 +50,11 @@ fi
 
 function init_storm_yaml() {
     STORM_YAML=$STORM_HOME/conf/storm.yaml
-    cp $STORM_HOME/conf/storm.yaml.template $STORM_YAML
+#    cp $STORM_HOME/conf/storm.yaml.template $STORM_YAML
 
-    sed -i s/%zookeeper%/$ZOOKEEPER_ADDR/g $STORM_YAML
-    sed -i s/%nimbus%/$NIMBUS_ADDR/g $STORM_YAML
-    sed -i s/%ui_port%/$UI_PORT/g $STORM_YAML
+#    sed -i s/%zookeeper%/$ZOOKEEPER_ADDR/g $STORM_YAML
+#    sed -i s/%nimbus%/$NIMBUS_ADDR/g $STORM_YAML
+#    sed -i s/%ui_port%/$UI_PORT/g $STORM_YAML
     for var in `( set -o posix ; set ) | grep CONFIG_`; do
         name=${var%"="*}
         confValue=${var#*"="}
@@ -70,6 +70,29 @@ function init_storm_yaml() {
         fi
     done
 }
+
+function log {
+    echo `date` $ME - $@
+}
+
+function checkrancher {
+    log "checking rancher network..."
+    a="1"
+    while  [ $a -eq 1 ];
+    do
+        a="`ip a s dev eth0 &> /dev/null; echo $?`" 
+        sleep 1
+    done
+
+    b="1"
+    while [ $b -eq 1 ]; 
+    do
+        b="`ping -c 1 rancher-metadata &> /dev/null; echo $?`"
+        sleep 1 
+    done
+}
+
+checkrancher
 
 init_storm_yaml
 
