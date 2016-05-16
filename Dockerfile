@@ -10,6 +10,9 @@ RUN add-apt-repository -y ppa:webupd8team/java && apt-get update
 RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections 
 RUN apt-get update && apt-get install -y oracle-java8-installer
 
+# add ping for checkrancher function in entrypoint
+RUN apt-get install -y iputils-ping
+
 # Tells Supervisor to run interactively rather than daemonize
 RUN apt-get install -y supervisor wget tar 
 RUN echo [supervisord] | tee -a /etc/supervisor/supervisord.conf ; echo nodaemon=true | tee -a /etc/supervisor/supervisord.conf
@@ -39,12 +42,7 @@ RUN chmod a+x /etc/confd
 RUN mkdir /var/log/storm ; chown -R storm:storm /var/log/storm ; ln -s /var/log/storm /home/storm/log
 RUN ln -s $STORM_HOME/bin/storm /usr/bin/storm
 
-# add ping for checkrancher function in entrypoint
-RUN apt-get install -y iputils-ping
-
 USER storm
-
-#COPY conf/storm.yaml.template $STORM_HOME/conf/storm.yaml.template
 
 # Add scripts required to run storm daemons under supervision
 COPY supervisor/storm-daemon.conf /home/storm/storm-daemon.conf
