@@ -1,5 +1,5 @@
 storm.zookeeper.servers:
-{{range $i, $e := ls ("/stacks/zookeeper/services/zookeeper/containers")}}-{{getv (printf "/stacks/zookeeper/services/zookeeper/containers/%s/primary_ip"  $e)}}:2181
+{{range $i, $e := ls ("/stacks/zookeeper/services/zookeeper/containers")}}- {{getv (printf "/stacks/zookeeper/services/zookeeper/containers/%s/primary_ip"  $e)}}:2181
 {{end}}
 
 ui.port: 8080
