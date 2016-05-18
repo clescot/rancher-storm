@@ -26,6 +26,8 @@ storm-supervisor:
     - storm-nimbus:nimbus
   external_links:
     - zookeeper/zookeeper:zk
+  depends_on:
+    - storm-nimbus
 
 storm-ui:
   command: --daemon ui
@@ -38,3 +40,6 @@ storm-ui:
     - storm-nimbus:nimbus
   external_links:
     - zookeeper/zookeeper:zk
+  depends_on:
+    - storm-nimbus
+    - storm-supervisor
