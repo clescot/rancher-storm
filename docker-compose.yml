@@ -1,6 +1,6 @@
 storm-nimbus:
   command: --daemon nimbus drpc
-  image: clescot/rancher-storm:67
+  image: clescot/rancher-storm:68
   labels:
     io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
   ports:
@@ -12,7 +12,7 @@ storm-nimbus:
 
 storm-supervisor:
   command: --daemon supervisor logviewer
-  image: clescot/rancher-storm:67
+  image: clescot/rancher-storm:68
   labels:
     io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
 
@@ -26,12 +26,13 @@ storm-supervisor:
     - storm-nimbus:nimbus
   external_links:
     - zookeeper/zookeeper:zk
+    - kafka/kafka:kafka
   depends_on:
     - storm-nimbus
 
 storm-ui:
   command: --daemon ui
-  image: clescot/rancher-storm:67
+  image: clescot/rancher-storm:68
   labels:
     io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
   ports:

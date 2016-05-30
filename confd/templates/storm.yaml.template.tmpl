@@ -3,7 +3,17 @@ storm.zookeeper.servers:
 {{end}}
 
 #storm.zookeeper.port: 2181
+
+nimbus.host: {{range $i, $e := ls ("/stacks/storm/services/storm-nimbus/containers")}}"{{getv (printf "/stacks/storm/services/storm-nimbus/containers/%s/primary_ip"  $e)}}"
+{{end}}
+nimbus.childopts: "-Xmx1024m -Djava.net.preferIPv4Stack=true"
+
+
 ui.port: 8080
+ui.childopts: "-Xmx768m -Djava.net.preferIPv4Stack=true"
+supervisor.childopts: "-Djava.net.preferIPv4Stack=true"
+worker.childopts: "-Xmx768m -Djava.net.preferIPv4Stack=true"
+
 
 # netty transport
 storm.messaging.transport: "backtype.storm.messaging.netty.Context"
